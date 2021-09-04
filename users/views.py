@@ -20,14 +20,24 @@ class UserDetail(generics.RetrieveUpdateAPIView):
     except User.DoesNotExist:
       raise Http404
   
-  def get(self, request, id, format=None):
+  def get(self, request, id):
     user = self.get_object(id)
     serializer = UserSerializer(user)
     return Response(serializer.data)
 
-  def put(self, request, id, format=None):
+  def put(self, request, id):
     user = self.get_object(id)
     serializer = UserSerializer(user, data=request.data)
+
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
+  def patch(self, request, id):
+    user = self.get_object(id)
+    serializer = UserSerializer(user, data=request.data, partial=True)
 
     if serializer.is_valid():
       serializer.save()
