@@ -17,8 +17,18 @@ class User(models.Model):
   first_name = models.CharField(max_length=128)
   last_name = models.CharField(max_length=128, blank=True)
   role = models.CharField(max_length=128, choices=USER_ROLES, default='reader')
-  read_books = models.ManyToManyField(Book, related_name="read_books", blank=True)
   wish_list = models.ManyToManyField(Book, related_name="wish_list", blank=True)
 
   class Meta:
     ordering = ['email']
+
+class ReadBook(models.Model):
+  def __str__(self):
+    return str(self.end_date)
+
+  user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="read_books")
+  book = models.ForeignKey(Book, on_delete=models.CASCADE)
+  end_date = models.DateField()
+
+  class Meta:
+    ordering = ['end_date']

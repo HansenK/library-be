@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.db import models
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
@@ -24,9 +25,13 @@ class Book(models.Model):
     return self.title
 
   title = models.CharField(max_length=128)
-  authors = models.ManyToManyField(Author, related_name="authors")
+  authors = models.ManyToManyField(Author, related_name="books")
   description = models.CharField(max_length=128, blank=True)
   tags = models.ManyToManyField(Tag, related_name="tags")
+
+  @admin.display(description='Authors')
+  def get_authors(self):
+    return ", ".join([author.first_name + " " + author.last_name for author in self.authors.all()])
 
   class Meta:
     ordering = ['title']
