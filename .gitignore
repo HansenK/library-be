@@ -1,6 +1,7 @@
 *.sqlite3
 
 .vscode
+.venv
 
 __pycache__
 migrations
