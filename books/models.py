@@ -26,7 +26,7 @@ class Book(models.Model):
 
   title = models.CharField(max_length=128)
   authors = models.ManyToManyField(Author, related_name="books")
-  description = models.CharField(max_length=128, blank=True)
+  description = models.TextField(blank=True)
   tags = models.ManyToManyField(Tag, related_name="tags")
 
   @admin.display(description='Authors')
